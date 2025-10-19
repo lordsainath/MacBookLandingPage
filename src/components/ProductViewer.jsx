@@ -3,11 +3,16 @@ import { productDataContext } from "../contexts/ProductContext";
 import { Canvas } from "@react-three/fiber";
 import { Box, OrbitControls } from "@react-three/drei";
 
-import StudioLights from "./models/StudioLights";
+import StudioLights from "./three/StudioLights";
 import MacBook14 from "./models/Macbook-14";
+import ModelSwitcher from "./three/ModelSwitcher";
+import { useMediaQuery } from "react-responsive";
 
 const ProductViewer = () => {
   const [color, setColor, scale, setScale] = useContext(productDataContext);
+
+  const isMobile = useMediaQuery({query:'(max-width:1024px)'});
+
   return (
     <>
       <section id="product-viewer">
@@ -56,11 +61,15 @@ const ProductViewer = () => {
           </div>
         </div>
 
-        <Canvas id="canvas" camera={{position:[0,2,5],fov:50,near:0.1 , far:100}}>
-         <MacBook14 scale={0.06}/>
-              {/* <ambientLight intensity={1}/> */}
-          <StudioLights/>
-          <OrbitControls enableZoom={false}/>
+        <Canvas
+          id="canvas"
+          camera={{ position: [0, 2, 5], fov: 50, near: 0.1, far: 100 }}
+        >
+          {/* <MacBook14 scale={0.06} /> */}
+          {/* <ambientLight intensity={1}/> */}
+          <StudioLights />
+          {/* <OrbitControls enableZoom={false} /> */}
+          <ModelSwitcher scale={isMobile ? scale - 0.03 : scale} isMobile={isMobile}/>
         </Canvas>
       </section>
     </>
